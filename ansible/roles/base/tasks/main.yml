@@ -1,8 +1,7 @@
 ---
 - name: Reconfigure Timezone To UTC
-  ansible.builtin.command: 
-    cmd: "timedatectl set-timezone UTC"
-  become: yes
+  community.general.timezone: 
+    name: "UTC"
 
 - name: Creating additional directorys
   tags: ['base']
@@ -77,3 +76,21 @@
     state: latest
   become: yes
 
+- name: Start Services
+  tags: ['base']
+  block:
+    - name: Enable PostGreSQL Service
+      ansible.builtin.service:
+        name: postgresql
+        enabled: yes
+
+    - name: Start PostGreSQL Service
+      ansible.builtin.service:
+        name: postgresql
+        state: started
+  
+- name: Initialise Metasploit
+  tags: ['base']
+  ansible.builtin.command:
+    cmd: "msfdb init"
+    creates: "/usr/share/metasploit-framework/config/database.yml"
