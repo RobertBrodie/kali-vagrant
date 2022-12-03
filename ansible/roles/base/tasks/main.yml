@@ -1,0 +1,79 @@
+---
+- name: Reconfigure Timezone To UTC
+  ansible.builtin.command: 
+    cmd: "timedatectl set-timezone UTC"
+  become: yes
+
+- name: Creating additional directorys
+  tags: ['base']
+  ansible.builtin.file:
+    path: "/home/{{ r_uid }}/{{ item }}"
+    state: directory
+    mode: 0700
+    owner: "{{ r_uid }}"
+    group: "{{ r_gid }}"
+  loop:
+    - "Tools"
+    - "Reports"
+    - "bin"
+    - "vpn"
+
+- name: Add Additional Files To $PATH.
+  tags: ['base']
+  ansible.builtin.copy:
+    src:  ".zshrc"
+    dest: "/home/{{ r_uid }}/.zshrc"
+    mode: 0600
+    owner: "{{ r_uid }}"
+    group: "{{ r_gid }}"
+
+- name: Transfer .zdirs File To $HOMEDIR
+  tags: ['base']
+  ansible.builtin.template:
+    src: templates/.zdirs.j2
+    dest: "/home/{{ r_uid }}/.zdirs"
+    owner: "{{ r_uid }}"
+    group: "{{ r_gid }}"
+    mode: '0600' 
+
+- name: Transfer .zprofile File To $HOMEDIR
+  tags: ['base']
+  ansible.builtin.template:
+    src: templates/.zprofile.j2
+    dest: "/home/{{ r_uid }}/.zprofile"
+    owner: "{{ r_uid }}"
+    group: "{{ r_gid }}"
+    mode: '0600' 
+
+- name: Remove Unwanted Packages
+  tags: ['base']
+  ansible.builtin.apt:
+    name: "{{ r_packages_remove|default([]) }}"
+    force: yes
+    purge: yes
+    state: absent
+  become: yes
+
+- name: Update Packages
+  tags: ['base']
+  ansible.builtin.apt:
+    update_cache: yes
+    upgrade: dist
+  become: yes
+
+- name: Install Common Packages
+  tags: ['base']
+  ansible.builtin.apt:
+    name: "{{ r_packages|default([]) }}"
+    update_cache: yes
+    install-recommends: no
+    state: present
+  become: yes
+
+- name: Install Common Pip Packages
+  tags: ['base']
+  ansible.builtin.pip:
+    name: "{{ r_pip_packages|default([]) }}"
+    state: latest
+  become: yes
+

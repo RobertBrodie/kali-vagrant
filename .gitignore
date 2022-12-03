@@ -1,0 +1,7 @@
+# Folders
+.env/
+.vagrant/
+
+# Files
+*.7z
+*.qcow2
