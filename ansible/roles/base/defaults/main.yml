@@ -24,6 +24,3 @@ r_packages:
 
 r_packages_remove:
   - nano
-
-r_pip_packages:
-  - requests

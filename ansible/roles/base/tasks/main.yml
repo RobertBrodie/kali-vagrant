@@ -69,13 +69,6 @@
     state: present
   become: yes
 
-- name: Install Common Pip Packages
-  tags: ['base']
-  ansible.builtin.pip:
-    name: "{{ r_pip_packages|default([]) }}"
-    state: latest
-  become: yes
-
 - name: Start Services
   tags: ['base']
   block:

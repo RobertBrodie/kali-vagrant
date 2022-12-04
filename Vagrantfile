@@ -32,10 +32,9 @@ Vagrant.configure("2") do |config|
 
     config.vm.provision "ansible" do |ansible|
       ansible.limit = "kali"
-      ansible.ask_vault_pass = true
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
-      ansible.verbose = "-vv"
+      ansible.verbose = "-v"
       ansible.become_user = "root"
       ansible.host_key_checking = false
     end
