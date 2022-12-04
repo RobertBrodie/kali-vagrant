@@ -5,3 +5,4 @@
 # Files
 *.7z
 *.qcow2
+.active_pass
