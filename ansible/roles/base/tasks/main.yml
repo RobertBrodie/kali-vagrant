@@ -57,7 +57,7 @@
   tags: ['base']
   ansible.builtin.apt:
     update_cache: yes
-    upgrade: dist
+    only_upgrade: true
   become: yes
 
 - name: Install Common Packages
@@ -67,6 +67,7 @@
     update_cache: yes
     install-recommends: no
     state: present
+    autoremove: yes
   become: yes
 
 - name: Start Services
