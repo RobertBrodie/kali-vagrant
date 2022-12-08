@@ -1,0 +1,5 @@
+---
+uid: "vagrant"
+
+wordlist_path: "/home/{{ uid }}/wordlists"
+rockyou_path: "/usr/share/wordlists"

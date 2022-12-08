@@ -29,7 +29,7 @@ install_ansible () {
     pip3 install --upgrade pip
     echo -e "\nInstalling Ansible...\n"
     sleep 2
-    pip3 install ansible
+    pip3 install ansible ansible-lint yamllint
   else
     echo -e "\nVirtual environment found...skipping\n"
   fi
@@ -46,18 +46,6 @@ start_vagrant () {
   vagrant up --no-provision
 }
 
-change_pass () {
-  # Generate Pass
-  if [ ! -f .active_pass ]
-  then
-    pass=$(openssl rand -base64 12)
-    echo $pass >> .active_pass
-    vagrant ssh kali -c "echo vagrant:$pass | sudo chpasswd"
-    sed -i '' "s/password = \"vagrant\"/password = \"$pass\"/g" Vagrantfile
-  fi
-}
-
 get_progs
 install_ansible
 start_vagrant
-change_pass

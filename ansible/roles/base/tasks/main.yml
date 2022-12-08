@@ -16,15 +16,20 @@
     - "Reports"
     - "bin"
     - "vpn"
+    - "wordlists"
 
 - name: Add Additional Files To $PATH.
   tags: ['base']
   ansible.builtin.copy:
-    src:  ".zshrc"
-    dest: "/home/{{ r_uid }}/.zshrc"
+    src:  "{{ item }}"
+    dest: "/home/{{ r_uid }}/{{ item }}"
     mode: 0600
     owner: "{{ r_uid }}"
     group: "{{ r_gid }}"
+  with_items:
+    - .zshrc
+    - .vimrc
+    - .tmux.conf
 
 - name: Transfer .zdirs File To $HOMEDIR
   tags: ['base']

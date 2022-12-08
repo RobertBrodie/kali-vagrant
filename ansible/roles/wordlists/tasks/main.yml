@@ -1,0 +1,25 @@
+---
+- name: Check For Rockyou
+  tags: ['wordlists']
+  ansible.builtin.stat:
+    path: "{{ wordlist_path }}/rockyou.txt"
+  register: rockyou
+
+- name: Move Rockyou To "{{ wordlist_path }}"
+  tags: ['wordlists']
+  block:
+    - name: Move Rockyou To "{{ wordlist_path }}"
+      ansible.builtin.command:
+        cmd: "mv {{ rockyou_path }}/rockyou.txt.gz {{ wordlist_path }}/"
+
+    - name: Unzip Rockyou
+      ansible.builtin.command:
+        cmd: "gunzip {{ wordlist_path }}/rockyou.txt.gz"
+
+    - name: Change Rockyou Wordlist Permissions
+      ansible.builtin.file:
+        path: "{{ wordlist_path }}/rockyou.txt"
+        owner: "{{ uid }}"
+        group: "{{ uid }}"
+        mode: '0600'
+  when: not rockyou.stat.exists

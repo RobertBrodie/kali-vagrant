@@ -3,5 +3,4 @@
   roles:
     - role: 'roles/base'
     - role: 'roles/firewall'
-    - role: 'roles/autorecon'
-
+    - role: 'roles/wordlists'

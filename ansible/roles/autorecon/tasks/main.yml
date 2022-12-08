@@ -1,6 +1,0 @@
----
-- name: Install Autorecon
-  tags: ['autorecon']
-  ansible.builtin.pip:
-    name: "git+https://github.com/Tib3rius/AutoRecon.git"
-    state: latest
