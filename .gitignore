@@ -6,3 +6,4 @@
 *.7z
 *.qcow2
 .active_pass
+*.ovpn

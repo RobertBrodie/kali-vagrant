@@ -2,26 +2,14 @@ r_uid: "vagrant"
 r_gid: "vagrant"
 r_dirpath: '/home/vagrant/bin:/home/vagrant/.local/bin'
 
-r_dirs:
-  - "Tools"
-  - "Reports"
-  - "bin"
-
 r_packages:
   - aptitude
   - apt-transport-https
   - htop
-  - libssl-dev
-  - meld
   - ufw
-  - network-manager-openvpn
-  - feroxbuster
-  - gobuster
-  - oscanner
-  - redis-tools
-  - tnscmd10g
-  - wkhtmltopdf
   - gdb
+  - dotdotpwn
+  - ghidra
 
 r_packages_remove:
   - nano

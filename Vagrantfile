@@ -13,7 +13,8 @@ Vagrant.configure("2") do |config|
     config.vm.provider :libvirt do |domain|
       domain.disk_bus = "virtio"
       domain.driver = "kvm"
-      domain.video_vram = 256
+      domain.video_vram = 16384
+      domain.video_type = "qxl"
       domain.memory = 4096
       domain.cpus = 2
       domain.graphics_type = "spice"
