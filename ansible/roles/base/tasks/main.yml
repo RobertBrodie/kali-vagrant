@@ -18,7 +18,7 @@
     - "vpn"
     - "wordlists"
 
-- name: Add Additional Files To $PATH.
+- name: Transfer Files To Kali.
   tags: ['base']
   ansible.builtin.copy:
     src:  "{{ item }}"
@@ -30,6 +30,7 @@
     - .zshrc
     - .vimrc
     - .tmux.conf
+    - .config/qterminal.org/qterminal.ini
 
 - name: Transfer .zdirs File To $HOMEDIR
   tags: ['base']
@@ -93,3 +94,32 @@
   ansible.builtin.command:
     cmd: "msfdb init"
     creates: "/usr/share/metasploit-framework/config/database.yml"
+
+- name: Check Ghidra Installed Or Not
+  tags: ['base']
+  ansible.builtin.stat:
+    path: "/opt/ghidra"
+    get_checksum: no
+  register: ghidra_dir
+
+- name: Download & Install Ghidra
+  tags: ['base']
+  block:
+    - name: Download Ghidra
+      ansible.builtin.get_url:
+        url: "{{ r_ghidra_url }}"
+        dest: "/opt/"
+        
+    - name: Unzip Ghidra
+      ansible.builtin.command:
+        cmd: "unzip -d /opt/ghidra /opt/{{ r_ghidra_zip }}"
+    
+    - name: Change Permissions
+      ansible.builtin.command:
+        cmd: "chown -R {{ r_uid }}:{{ r_gid }} /opt/ghidra"
+
+    - name: Remove Ghidra Download
+      ansible.builtin.file:
+        path: "/opt/{{ r_ghidra_zip }}"
+        state: absent
+  when: not ghidra_dir.stat.exists
