@@ -17,6 +17,7 @@
     - "bin"
     - "vpn"
     - "wordlists"
+    - "tmp"
 
 - name: Transfer Files To Kali.
   tags: ['base']

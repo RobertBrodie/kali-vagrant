@@ -12,6 +12,8 @@ r_packages:
   - gdb
   - dotdotpwn
   - openjdk-17-jdk
+  - seclists
+  - jq
 
 r_packages_remove:
   - nano
