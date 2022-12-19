@@ -6,7 +6,7 @@
 #set -x
 
 get_progs () {
-  progs=("python3" "vagrant" "openssl" "sed")
+  progs=("python3" "vagrant")
   for prog in ${progs[@]}; do
     installed=$(command -v $prog)
     if [ -z "$installed" ]
@@ -24,14 +24,14 @@ install_ansible () {
     sleep 2
     python3 -m venv .env
     source .env/bin/activate
-    echo -e "\nUpgrading pip3...\n"
+    echo -e "Upgrading pip3...\n"
     sleep 2
     pip3 install --upgrade pip
-    echo -e "\nInstalling Ansible...\n"
+    echo -e "Installing Ansible...\n"
     sleep 2
     pip3 install ansible ansible-lint yamllint
   else
-    echo -e "\nVirtual environment found...skipping\n"
+    echo -e "Virtual environment found...skipping\n"
   fi
 }
 
