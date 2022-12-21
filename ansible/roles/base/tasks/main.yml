@@ -3,7 +3,7 @@
   community.general.timezone: 
     name: "UTC"
 
-- name: Creating additional directorys
+- name: Creating Additional Home Directorys
   tags: ['base']
   ansible.builtin.file:
     path: "/home/{{ r_uid }}/{{ item }}"
@@ -18,6 +18,28 @@
     - "vpn"
     - "wordlists"
     - "tmp"
+    - ".config/qterminal.org"
+
+- name: Create Additional Filesystem Directorys
+  tags: ['base']
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0700
+    owner: "{{ r_uid }}"
+    group: "{{ r_gid }}"
+  loop:
+    - "/opt/ide"
+
+- name: Change "/opt" Ownership
+  tags: ['base']
+  ansible.builtin.file:
+    path: "/opt"
+    state: directory
+    recurse: true
+    mode: 0700
+    owner: "{{ r_uid }}"
+    group: "{{ r_gid }}"
 
 - name: Transfer Files To Kali.
   tags: ['base']
@@ -95,32 +117,3 @@
   ansible.builtin.command:
     cmd: "msfdb init"
     creates: "/usr/share/metasploit-framework/config/database.yml"
-
-- name: Check Ghidra Installed Or Not
-  tags: ['base']
-  ansible.builtin.stat:
-    path: "/opt/ghidra"
-    get_checksum: no
-  register: ghidra_dir
-
-- name: Download & Install Ghidra
-  tags: ['base']
-  block:
-    - name: Download Ghidra
-      ansible.builtin.get_url:
-        url: "{{ r_ghidra_url }}"
-        dest: "/opt/"
-        
-    - name: Unzip Ghidra
-      ansible.builtin.command:
-        cmd: "unzip -d /opt/ghidra /opt/{{ r_ghidra_zip }}"
-    
-    - name: Change Permissions
-      ansible.builtin.command:
-        cmd: "chown -R {{ r_uid }}:{{ r_gid }} /opt/ghidra"
-
-    - name: Remove Ghidra Download
-      ansible.builtin.file:
-        path: "/opt/{{ r_ghidra_zip }}"
-        state: absent
-  when: not ghidra_dir.stat.exists

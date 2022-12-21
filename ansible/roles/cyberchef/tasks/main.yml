@@ -1,0 +1,39 @@
+---
+- name: Check Cyberchef Installed Or Not
+  tags: ['cyberchef']
+  ansible.builtin.stat:
+    path: "/opt/cyberchef"
+    get_checksum: no
+  register: cyberchef_dir
+
+- name: Download & Install Cyberchef
+  tags: ['cyberchef']
+  become: true
+  block:
+    - name: Create Cyberchef Directory
+      ansible.builtin.file:
+        path: "/opt/cyberchef"
+        state: directory
+        mode: 0700
+        owner: "{{ r_uid }}"
+        group: "{{ r_gid }}"
+        
+    - name: Download Cyberchef
+      ansible.builtin.get_url:
+        url: "{{ r_cyberchef_url }}"
+        dest: "/opt/cyberchef"
+
+    - name: Unzip Cyberchef
+      ansible.builtin.unarchive:
+        src: "/opt/cyberchef/{{ r_cyberchef_zip }}"
+        dest: "/opt/cyberchef"
+        owner: "{{ r_uid }}"
+        group: "{{ r_uid }}"
+        mode: '0700'
+        remote_src: true
+
+    - name: Remove Cyberchef Download
+      ansible.builtin.file:
+        path: "/opt/cyberchef/{{ r_cyberchef_zip }}"
+        state: absent
+  when: not cyberchef_dir.stat.exists

@@ -1,0 +1,30 @@
+---
+- name: Check Ghidra Installed Or Not
+  tags: ['ghidra']
+  ansible.builtin.stat:
+    path: "/opt/ide/ghidra_10.2.2_PUBLIC"
+    get_checksum: no
+  register: ghidra_dir
+
+- name: Download & Install Ghidra
+  tags: ['ghidra']
+  block:
+    - name: Download Ghidra
+      ansible.builtin.get_url:
+        url: "{{ r_ghidra_url }}"
+        dest: "/opt/ide"
+        
+    - name: Unzip Ghidra
+      ansible.builtin.unarchive:
+        src: "/opt/ide/{{ r_ghidra_zip }}"
+        dest: "/opt/ide"
+        owner: "{{ r_uid }}"
+        group: "{{ r_uid }}"
+        mode: '0700'
+        remote_src: true
+
+    - name: Remove Ghidra Download
+      ansible.builtin.file:
+        path: "/opt/ide/{{ r_ghidra_zip }}"
+        state: absent
+  when: not ghidra_dir.stat.exists

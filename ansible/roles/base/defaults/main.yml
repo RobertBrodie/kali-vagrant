@@ -1,8 +1,6 @@
 r_uid: "vagrant"
 r_gid: "vagrant"
 r_dirpath: '/home/vagrant/bin:/home/vagrant/.local/bin'
-r_ghidra_url: 'https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_10.2.2_build/ghidra_10.2.2_PUBLIC_20221115.zip'
-r_ghidra_zip: "{{ r_ghidra_url | basename }}"
 
 r_packages:
   - aptitude
