@@ -1,26 +1,27 @@
 ---
-- name: Beginning Firewall Configuration
-  block:
-    - name: Identify IPV6 Enabled
-      tags: ['firewall']
-      ansible.builtin.replace:
-        path: /etc/default/ufw
-        regexp: '^IPV6=yes'
-        replace: 'IPV6=no'
+- name: Identify IPV6 Enabled
+  tags: ['firewall']
+  ansible.builtin.replace:
+    path: /etc/default/ufw
+    regexp: '^IPV6=yes'
+    replace: 'IPV6=no'
 
-    - name: Allow tcp/22 (SSH)
-      tags: ['firewall']
-      community.general.ufw:
-        rule: allow
-        name: OpenSSH
+- name: Allow tcp/22 (SSH)
+  tags: ['firewall']
+  community.general.ufw:
+    rule: allow
+    name: OpenSSH
+    src: "{{ item }}"
+  with_items:
+    - "{{ r_firewall_sources }}"
   
-    - name: Ensure UFW Is Enabled
-      tags: ['firewall']
-      community.general.ufw:
-        state: enabled
-        policy: deny
+- name: Ensure UFW Is Enabled
+  tags: ['firewall']
+  community.general.ufw:
+    state: enabled
+    policy: deny
 
-    - name: UFW Logging Enabled
-      tags: ['firewall']
-      community.general.ufw:
-        logging: 'on'
+- name: UFW Logging Enabled
+  tags: ['firewall']
+  community.general.ufw:
+    logging: 'on'

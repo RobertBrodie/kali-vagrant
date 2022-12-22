@@ -6,4 +6,4 @@
     - role: 'roles/wordlists'
     - role: 'roles/external_tools'
       #- role: 'roles/ghidra'
-      #XfvGPdhAYzwA8ZwL- role: 'roles/cyberchef'
+      #- role: 'roles/cyberchef'

@@ -1,3 +1,0 @@
----
-r_cyberchef_url: 'https://gchq.github.io/CyberChef/CyberChef_v9.55.0.zip'
-r_cyberchef_zip: "{{ r_cyberchef_url | basename }}"

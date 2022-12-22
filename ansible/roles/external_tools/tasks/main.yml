@@ -1,13 +1,24 @@
 ---
+- name: Create External Apps Directorys
+  tags: ['external_apps']
+  ansible.builtin.file:
+    path: "{{ item.value.dest }}"
+    state: directory
+    mode: 0700
+    owner: "{{ r_uid }}"
+    group: "{{ r_gid }}"
+  with_dict: "{{ apps }}"
+
 - name: Download & Unzip The Apps
+  tags: ['external_apps']
   become: true
   ansible.builtin.unarchive:
     src: "{{ item.value.url }}"
     dest: "{{ item.value.dest }}"
     owner: "{{ r_uid }}"
-    group: "{{ r_uid }}"
+    group: "{{ r_gid }}"
     mode: '0700'
     remote_src: true
-    creates: "{{ item.value.check_dir }}"
+    creates: "{{ item.value.is_present }}"
   with_dict: "{{ apps }}"
 

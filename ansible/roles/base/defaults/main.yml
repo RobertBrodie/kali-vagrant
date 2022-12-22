@@ -1,7 +1,6 @@
-r_uid: "vagrant"
-r_gid: "vagrant"
+r_uid: vagrant
+r_gid: vagrant
 r_dirpath: '/home/vagrant/bin:/home/vagrant/.local/bin'
-
 r_packages:
   - aptitude
   - apt-transport-https
@@ -17,6 +16,23 @@ r_packages:
   - chisel
   - libreoffice-writer
   - guake
-
 r_packages_remove:
   - nano
+r_home_dirs:
+  - Tools
+  - Reports
+  - bin
+  - vpn
+  - wordlists
+  - tmp
+  - '.config/qterminal.org'
+r_home_files:
+  - .zshrc
+  - .vimrc
+  - .tmux.conf
+  - '.config/qterminal.org/qterminal.ini'
+r_z_files:
+  - .zdirs
+  - .zprofile
+r_services:
+  - postgresql

@@ -2,34 +2,7 @@
 - name: Reconfigure Timezone To UTC
   community.general.timezone: 
     name: "UTC"
-
-- name: Creating Additional Home Directorys
-  tags: ['base']
-  ansible.builtin.file:
-    path: "/home/{{ r_uid }}/{{ item }}"
-    state: directory
-    mode: 0700
-    owner: "{{ r_uid }}"
-    group: "{{ r_gid }}"
-  loop:
-    - "Tools"
-    - "Reports"
-    - "bin"
-    - "vpn"
-    - "wordlists"
-    - "tmp"
-    - ".config/qterminal.org"
-
-- name: Create Additional Filesystem Directorys
-  tags: ['base']
-  ansible.builtin.file:
-    path: "{{ item }}"
-    state: directory
-    mode: 0700
-    owner: "{{ r_uid }}"
-    group: "{{ r_gid }}"
-  loop:
-    - "/opt/ide"
+  become: yes
 
 - name: Change "/opt" Ownership
   tags: ['base']
@@ -40,6 +13,19 @@
     mode: 0700
     owner: "{{ r_uid }}"
     group: "{{ r_gid }}"
+  become: yes
+
+- name: Creating Additional Home Directorys
+  tags: ['base']
+  ansible.builtin.file:
+    path: "/home/{{ r_uid }}/{{ item }}"
+    state: directory
+    mode: 0700
+    owner: "{{ r_uid }}"
+    group: "{{ r_gid }}"
+  become: no
+  with_items:
+    - "{{ r_home_dirs }}"
 
 - name: Transfer Files To Kali.
   tags: ['base']
@@ -49,29 +35,21 @@
     mode: 0600
     owner: "{{ r_uid }}"
     group: "{{ r_gid }}"
+  become: no
+  with_items: 
+    - "{{ r_home_files }}"
+
+- name: Transfer .z* Files To Home
+  tags: ['base']
+  ansible.builtin.template:
+    src: "templates/{{ item }}.j2" 
+    dest: "/home/{{ r_uid }}/{{ item }}"
+    owner: "{{ r_uid }}"
+    group: "{{ r_gid }}"
+    mode: '0600' 
+  become: no
   with_items:
-    - .zshrc
-    - .vimrc
-    - .tmux.conf
-    - .config/qterminal.org/qterminal.ini
-
-- name: Transfer .zdirs File To $HOMEDIR
-  tags: ['base']
-  ansible.builtin.template:
-    src: templates/.zdirs.j2
-    dest: "/home/{{ r_uid }}/.zdirs"
-    owner: "{{ r_uid }}"
-    group: "{{ r_gid }}"
-    mode: '0600' 
-
-- name: Transfer .zprofile File To $HOMEDIR
-  tags: ['base']
-  ansible.builtin.template:
-    src: templates/.zprofile.j2
-    dest: "/home/{{ r_uid }}/.zprofile"
-    owner: "{{ r_uid }}"
-    group: "{{ r_gid }}"
-    mode: '0600' 
+    - "{{ r_z_files }}"
 
 - name: Remove Unwanted Packages
   tags: ['base']
@@ -101,16 +79,13 @@
 
 - name: Start Services
   tags: ['base']
-  block:
-    - name: Enable PostGreSQL Service
-      ansible.builtin.service:
-        name: postgresql
-        enabled: yes
-
-    - name: Start PostGreSQL Service
-      ansible.builtin.service:
-        name: postgresql
-        state: started
+  ansible.builtin.service:
+    name: "{{ item }}"
+    enabled: yes
+    state: started
+  become: yes
+  with_items:
+    - "{{ r_services }}"
   
 - name: Initialise Metasploit
   tags: ['base']
