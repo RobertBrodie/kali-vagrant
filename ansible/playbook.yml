@@ -4,5 +4,6 @@
     - role: 'roles/base'
     - role: 'roles/firewall'
     - role: 'roles/wordlists'
-    - role: 'roles/ghidra'
-    - role: 'roles/cyberchef'
+    - role: 'roles/external_tools'
+      #- role: 'roles/ghidra'
+      #XfvGPdhAYzwA8ZwL- role: 'roles/cyberchef'

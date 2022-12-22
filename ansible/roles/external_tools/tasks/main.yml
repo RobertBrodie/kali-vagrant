@@ -1,0 +1,13 @@
+---
+- name: Download & Unzip The Apps
+  become: true
+  ansible.builtin.unarchive:
+    src: "{{ item.value.url }}"
+    dest: "{{ item.value.dest }}"
+    owner: "{{ r_uid }}"
+    group: "{{ r_uid }}"
+    mode: '0700'
+    remote_src: true
+    creates: "{{ item.value.check_dir }}"
+  with_dict: "{{ apps }}"
+
