@@ -27,9 +27,10 @@ r_home_dirs:
   - tmp
   - '.config/qterminal.org'
 r_home_files:
-  - .zshrc
-  - .vimrc
-  - .tmux.conf
+  - '.zshrc'
+  - '.vimrc'
+  - '.tmux.conf'
+  - 'Reports/CTF_template.ctb'
   - '.config/qterminal.org/qterminal.ini'
 r_z_files:
   - .zdirs
